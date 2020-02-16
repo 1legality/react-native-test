@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Button, AsyncStorage } from 'react-native';
 import { API_URL } from 'react-native-dotenv'
 import {
   NavigationParams, 
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
 async function login(username: string, password: string) {
   try {
     console.log(`login in to ${API_URL}/login`)
-    let response = await fetch(`${API_URL}/login`, {
+    let request = await fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -81,8 +81,17 @@ async function login(username: string, password: string) {
       }),
     });
 
-    let authToken = await response.text(); // retrieve jwt token from server
-    console.log(authToken);
+    let response = await request;
+    if (response.ok) {
+      let authToken = await response.text(); // retrieve jwt token from server
+
+      await AsyncStorage.setItem('@cook2:token', authToken);
+      const token = await AsyncStorage.getItem('@cook2:token');
+
+      console.log(token);
+    } else {
+      console.log(response.status);
+    }
   }
   catch (error) {
     console.log(error);
