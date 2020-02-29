@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, AsyncStorage } from 'react-native';
-import { API_URL } from 'react-native-dotenv'
 import {
   NavigationParams, 
   NavigationScreenProp, 
   NavigationState
 } from 'react-navigation';
+
+import { FBLoginButton } from './logins/FBLoginButton'
+import { GLoginButton } from './logins/GLoginButton'
+
+import { API_URL } from 'react-native-dotenv'
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -47,6 +51,10 @@ class LoginScreen extends Component<Props> {
             login(this.state.username, this.state.password)
           }}
         />
+
+        <FBLoginButton />
+
+        <GLoginButton />
 
       </View>
     );
